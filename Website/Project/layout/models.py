@@ -22,13 +22,17 @@ class Navbar(models.Model):
         on_delete=models.CASCADE, related_name='+'
     )
     links = StreamField([
-        ('navs',blocks.LinkBlock())
+        ('navs',blocks.LinkBlock()),
+        ('dropdown', blocks.SidebarBlock(icon='link', label='Dropdown Links'))
+
     ],null=True,blank=True)
 
     panels = [FieldPanel('title'),
               ImageChooserPanel('logo'),
-              FieldPanel('links',heading='Nav Links',classname='collapsible')]
-
+              MultiFieldPanel([
+              FieldPanel('links'),
+              ],heading='Links',classname='collapsible')
+            ]
     def __str__(self):
         return self.title
 
@@ -83,7 +87,7 @@ class Banner(models.Model):
         related_name='+'
     )
     panels = [FieldPanel('title'),
-              FieldPanel('banner')]
+              FieldPanel('image')]
 
     def __str__(self):
         return self.title
@@ -92,6 +96,27 @@ class Banner(models.Model):
         verbose_name = "Banner"
         verbose_name_plural = "Banners"
 
+class Layout(Page):
+    max_count = 1
+
+    # First create an empty layout page and than add the below code
+    def get_context(self, request, *args, **kwargs):
+        context = super(Layout,self).get_context(request)
+        context['layout'] = Layout.objects.get(title='layout')
+        return context
+
+    banner = ParentalManyToManyField(Banner,blank=True)
+    navbar = ParentalManyToManyField(Navbar,blank=True)
+    # sidebar = ParentalManyToManyField(Sidebar,blank=True)
+    # footer = ParentalManyToManyField(Footer,blank=True)
+
+
+    content_panels = Page.content_panels + [
+        FieldPanel('banner',widget=forms.CheckboxSelectMultiple),
+        FieldPanel('navbar',widget=forms.CheckboxSelectMultiple),
+        # FieldPanel('sidebar',widget=forms.CheckboxSelectMultiple),
+        # FieldPanel('footer',widget=forms.CheckboxSelectMultiple),
+    ]
 
 
 
