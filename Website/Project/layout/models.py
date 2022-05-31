@@ -99,8 +99,6 @@ class Banner(models.Model):
 class Layout(Page):
     max_count = 1
 
-
-
     banner = ParentalManyToManyField(Banner,blank=True)
     navbar = ParentalManyToManyField(Navbar,blank=True)
     sidebar = ParentalManyToManyField(Sidebar,blank=True)

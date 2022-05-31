@@ -1,7 +1,13 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fossee</title>
+
+</head>
+<body>
 {% load wagtailcore_tags wagtailimages_tags %}
 
-{% block content %}
 <!--Banner-->
 {% for block in page.banner.all %}
 {% image block.image original %}
@@ -50,9 +56,9 @@
 {% endfor %}
 <!--Navbar-->
 
-<!--Sidebar-->
 <div id="content-wrapper">
     <div id="content-inner" class="row">
+        <!--Sidebar-->
         {% for sidebar in page.sidebar.all %}
         <h1>Sidebar {{forloop.counter}}</h1>
         <div id="sidebar" class="col-lg-2 col-md-2 col-sm-2">
@@ -71,9 +77,6 @@
         </div>
         {% endfor %}
         <!--Sidebar-->
-        {% block maincontent %}
-        
-        {% endblock %}
     </div> <!-- /content-inner -->
 </div>
 
@@ -103,8 +106,7 @@
     </div> <!-- /footer-inner -->
 </div>
 {% endfor %}
-<!--Footer-->
 
-{% endblock %}
+</body>
 
-
+</html>
