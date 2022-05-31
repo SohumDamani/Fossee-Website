@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Fossee</title>
-    
+
 </head>
 <body>
 {% load wagtailcore_tags wagtailimages_tags %}
 
 
 <!--Banner-->
-{% for block in layout.banner.all %}
+{% for block in page.banner.all %}
 {% image block.image original %}
 {% endfor %}
 <!--Banner-->
 
 <!--Navbar-->
-{% for navbar in layout.navbar.all %}
+{% for navbar in page.navbar.all %}
+<h1>Navbar {{forloop.counter}}</h1>
 <div id="header-wrapper">
     <div id="header-inner">
         <div id="branding" class="pull-left">
@@ -28,19 +29,19 @@
         <ul id="main-nav" class="nav nav-pills pull-right navbar navbar-default">
             {% for navlink in navbar.links %}<!--navbar links-->
             {% if navlink.block_type == 'dropdown' %}<!--navlink type-->
-                <li>
-                   {{navlink.value.title}}
-                    <ul>
-                        {% for droplink in navlink.value.links %}
-                        {% if droplink.value.visible %}
-                        <li class="">
-                            {{droplink.value.link}}
-                        </li>
-                        {% endif %}
-                        {% endfor %}
-                    </ul>
-                    
-                </li>
+            <li>
+                {{navlink.value.title}}
+                <ul>
+                    {% for droplink in navlink.value.links %}
+                    {% if droplink.value.visible %}
+                    <li class="">
+                        {{droplink.value.link}}
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            
+            </li>
             {% else %}
             {% if navlink.value.visible %}
             <li class="">
@@ -56,11 +57,57 @@
 {% endfor %}
 <!--Navbar-->
 
-{% for banner in layout.banner_selector.all %}
-{% image banner.banner.image original%}<br>
-{% endfor %}
+<div id="content-wrapper">
+    <div id="content-inner" class="row">
+        <!--Sidebar-->
+        {% for sidebar in page.sidebar.all %}
+        <h1>Sidebar {{forloop.counter}}</h1>
+        <div id="sidebar" class="col-lg-2 col-md-2 col-sm-2">
+            {% for block in sidebar.sidebar %}
+            <div class="block">
+                <h5 class="block-heading">{{block.value.title}}</h5>
+                <ul>
+                    {% for link in block.value.links %}
+                    {% if link.value.visible %}
+                    <li>{{link.value.link}}</li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}<!-- /block -->
+        </div>
+        {% endfor %}
+        <!--Sidebar-->
+    </div> <!-- /content-inner -->
+</div>
+
 <!--Footer-->
-ASDasx
+{% for footer in page.footer.all %}
+<h1>{{footer.title}}</h1>
+<div id="footer-wrapper">
+    <div id="footer-inner">
+        {% for block in footer.footer %}
+        <div class="foot col-lg-4 col-md-4 col-sm-4">
+            <h2 class="foot-heading">{{block.value.title}}</h2>
+            <ul>
+                {% if block.block_type == 'extlinks' %}
+                {% for link in block.value.links %}
+                {% if link.value.visible %}
+                <li>
+                    {{link.value.link}}
+                </li>
+                {% endif %} <!--end visible-->
+                {% endfor %}<!--end block-->
+                {% else %}
+                {{block.value.content}}
+                {% endif %}
+            </ul>
+        </div>
+        {% endfor %}<!--footer-->
+    </div> <!-- /footer-inner -->
+</div>
+{% endfor %}
+
 </body>
 
 </html>

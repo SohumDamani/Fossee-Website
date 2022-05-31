@@ -99,23 +99,19 @@ class Banner(models.Model):
 class Layout(Page):
     max_count = 1
 
-    # First create an empty layout page and than add the below code
-    def get_context(self, request, *args, **kwargs):
-        context = super(Layout,self).get_context(request)
-        context['layout'] = Layout.objects.get(title='layout')
-        return context
+
 
     banner = ParentalManyToManyField(Banner,blank=True)
     navbar = ParentalManyToManyField(Navbar,blank=True)
-    # sidebar = ParentalManyToManyField(Sidebar,blank=True)
-    # footer = ParentalManyToManyField(Footer,blank=True)
+    sidebar = ParentalManyToManyField(Sidebar,blank=True)
+    footer = ParentalManyToManyField(Footer,blank=True)
 
 
     content_panels = Page.content_panels + [
         FieldPanel('banner',widget=forms.CheckboxSelectMultiple),
         FieldPanel('navbar',widget=forms.CheckboxSelectMultiple),
-        # FieldPanel('sidebar',widget=forms.CheckboxSelectMultiple),
-        # FieldPanel('footer',widget=forms.CheckboxSelectMultiple),
+        FieldPanel('sidebar',widget=forms.CheckboxSelectMultiple),
+        FieldPanel('footer',widget=forms.CheckboxSelectMultiple),
     ]
 
 
