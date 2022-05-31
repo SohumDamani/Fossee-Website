@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fossee</title>
+    
+</head>
+<body>
+{% load wagtailcore_tags wagtailimages_tags %}
+
+
+<!--Banner-->
+{% for block in layout.banner.all %}
+{% image block.image original %}
+{% endfor %}
+<!--Banner-->
+
+<!--Navbar-->
+{% for navbar in layout.navbar.all %}
+<div id="header-wrapper">
+    <div id="header-inner">
+        <div id="branding" class="pull-left">
+            {% image navbar.logo fill-50x50 %}
+            <a href="/" style="text-decoration: none; color: #424242">
+                <span id="brand-text">Python</span>
+            </a>
+        </div>
+        <ul id="main-nav" class="nav nav-pills pull-right navbar navbar-default">
+            {% for navlink in navbar.links %}<!--navbar links-->
+            {% if navlink.block_type == 'dropdown' %}<!--navlink type-->
+                <li>
+                   {{navlink.value.title}}
+                    <ul>
+                        {% for droplink in navlink.value.links %}
+                        {% if droplink.value.visible %}
+                        <li class="">
+                            {{droplink.value.link}}
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                    
+                </li>
+            {% else %}
+            {% if navlink.value.visible %}
+            <li class="">
+                {{navlink.value.link}}
+            </li>
+            {% endif %}
+            {% endif %} <!--navlink type-->
+            {% endfor %}<!--navbar links-->
+        </ul>
+        <div class="clearfix"></div>
+    </div> <!-- /header-inner -->
+</div>
+{% endfor %}
+<!--Navbar-->
+
+{% for banner in layout.banner_selector.all %}
+{% image banner.banner.image original%}<br>
+{% endfor %}
+<!--Footer-->
+ASDasx
+</body>
+
+</html>
