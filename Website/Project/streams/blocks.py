@@ -1,5 +1,5 @@
 from wagtail import blocks
-
+from wagtail.images.blocks import ImageChooserBlock
 
 
 class LinkBlock(blocks.StructBlock):
@@ -29,13 +29,12 @@ class TitleAndContent(blocks.StructBlock):
     class Meta:
         icon='edit'
 
-
-class SidebarBlock(blocks.StructBlock):
+class TitleAndLinks(blocks.StructBlock):
     title = blocks.CharBlock(max_length=250,required=True)
     links = StreamBlock(
         [
             ('link',LinkBlock())
-        ]
+        ],collapsed=True
     )
 
     class Meta:
@@ -43,14 +42,20 @@ class SidebarBlock(blocks.StructBlock):
         icon = 'edit'
         label = 'Content'
 
-class FooterBlock(blocks.StructBlock):
-    title = CharBlock()
-    content = blocks.RichTextBlock(label='Message')
+class ImageBlock(blocks.StructBlock):
+    title = CharBlock(max_length=255,
+                      help_text="Add only if you want to display it with the image",
+                      required=False)
+    img = ImageChooserBlock(required=True)
+    img_link = blocks.URLBlock(required=False,
+                               help_text="Hyperlink the image to given url")
 
     class Meta:
-        template = "streams/self_block.html"
-        icon='edit'
-        label = 'Content'
+        template = 'streams/image_block.html'
+        icon = 'image'
+
+
+
 
 
 

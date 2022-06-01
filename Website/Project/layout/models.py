@@ -23,9 +23,9 @@ class Navbar(models.Model):
     )
     links = StreamField([
         ('navs',blocks.LinkBlock()),
-        ('dropdown', blocks.SidebarBlock(icon='link', label='Dropdown Links'))
+        ('dropdown', blocks.TitleAndLinks(icon='link', label='Dropdown Links'))
 
-    ],null=True,blank=True)
+    ],null=True,blank=True,collapsed=True)
 
     panels = [FieldPanel('title'),
               ImageChooserPanel('logo'),
@@ -45,8 +45,8 @@ class Sidebar(models.Model):
     title = models.CharField(primary_key=True,max_length=255)
     sidebar = StreamField(
         [
-            ('sidebar',blocks.SidebarBlock())
-        ],null=True,blank=True)
+            ('sidebar',blocks.TitleAndLinks())
+        ],null=True,blank=True,collapsed=True)
     panels = [FieldPanel('title'),
               FieldPanel('sidebar')]
 
@@ -62,9 +62,9 @@ class Footer(models.Model):
     title = models.CharField(primary_key=True,max_length=255)
     footer = StreamField(
         [
-            ('contents', blocks.FooterBlock()),
-            ('extlinks',blocks.SidebarBlock(label='External Links',icon='link'))
-        ],null=True,blank=True)
+            ('contents', blocks.TitleAndContent()),
+            ('extlinks',blocks.TitleAndLinks(label='External Links',icon='link'))
+        ],null=True,blank=True,collapsed=True)
 
     panels = [FieldPanel('title'),
               FieldPanel('footer')]
@@ -98,6 +98,10 @@ class Banner(models.Model):
 
 class Layout(Page):
     max_count = 1
+    def get_context(self, request, *args, **kwargs):
+        context = super(Layout, self).get_context(request)
+        context['layout'] = context['page'] #adding page reference with name layout
+        return context
 
     banner = ParentalManyToManyField(Banner,blank=True)
     navbar = ParentalManyToManyField(Navbar,blank=True)

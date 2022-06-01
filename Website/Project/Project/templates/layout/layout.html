@@ -1,110 +1,119 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags %}
+
 
 {% block content %}
-<!--Banner-->
-{% for block in page.banner.all %}
-{% image block.image original %}
-{% endfor %}
-<!--Banner-->
+{% load wagtailcore_tags wagtailimages_tags %}
 
-<!--Navbar-->
-{% for navbar in page.navbar.all %}
-<h1>Navbar {{forloop.counter}}</h1>
-<div id="header-wrapper">
-    <div id="header-inner">
-        <div id="branding" class="pull-left">
-            {% image navbar.logo fill-50x50 %}
-            <a href="/" style="text-decoration: none; color: #424242">
-                <span id="brand-text">Python</span>
-            </a>
-        </div>
-        <ul id="main-nav" class="nav nav-pills pull-right navbar navbar-default">
-            {% for navlink in navbar.links %}<!--navbar links-->
-            {% if navlink.block_type == 'dropdown' %}<!--navlink type-->
-            <li>
-                {{navlink.value.title}}
+<div class="page-wrapper">
+    
+    <!--Banner-->
+    <div style="text-align:center;">
+        {% for block in layout.banner.all %}
+        {% image block.image original %}
+        {% endfor %}
+    </div>
+    <!--Banner-->
+    
+    <!--Navbar-->
+    {% for navbar in layout.navbar.all %}
+    <div id="header-wrapper">
+        <div id="header-inner">
+            <div id="branding" class="pull-left">
+                {% image navbar.logo fill-50x50 %}
+                <a href="/" style="text-decoration: none; color: #424242">
+                    <span id="brand-text">Python</span>
+                </a>
+            </div>
+            <ul id="main-nav" class="nav nav-pills pull-right navbar navbar-default">
+                {% for navlink in navbar.links %}<!--navbar links-->
+                {% if navlink.block_type == 'dropdown' %}<!--navlink type-->
+                <li class="dropdown open">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        {{navlink.value.title}} <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                        {% for droplink in navlink.value.links %}
+                        {% if droplink.value.visible %}
+                        <li>
+                            {{droplink.value.link}}
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% else %}
+                {% if navlink.value.visible %}
+                <li class="dropdown">
+                    {{navlink.value.link}}
+                </li>
+                {% endif %}
+                {% endif %} <!--navlink type-->
+                {% endfor %}<!--navbar links-->
+            </ul>
+            <div class="clearfix"></div>
+        </div> <!-- /header-inner -->
+    </div>
+    {% endfor %}
+    <!--Navbar-->
+    
+    <!--Main Block-->
+    <div id="content-wrapper">
+        <div id="content-inner" class="row">
+            <!--Sidebar Block-->
+            {% for sidebar in layout.sidebar.all %}
+            <div id="sidebar" class="col-lg-2 col-md-2 col-sm-2">
+                {% for block in sidebar.sidebar %}
+                <div class="block">
+                    <h5 class="block-heading">{{block.value.title}}</h5>
+                    <ul>
+                        {% for link in block.value.links %}
+                        {% if link.value.visible %}
+                        <li><a href="link.value.link.url">Hello</a></li>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}<!-- /block -->
+            </div>
+            {% endfor %}
+            <!--Sidebar-->
+            <div id="content" class="col-lg-10 col-md-10 col-sm-10">
+                {% block maincontent %}
+                
+                {% endblock %}
+            </div>
+            <div class="clearfix"></div>
+        </div> <!-- /content-inner -->
+    </div><!--Main Block -->
+    
+    <!--Footer-->
+    {% for footer in layout.footer.all %}
+    <div id="footer-wrapper">
+        <div id="footer-inner">
+            {% for block in footer.footer %}<!--footer contents-->
+            <div class="foot col-lg-4 col-md-4 col-sm-4">
+                <h2 class="foot-heading">{{block.value.title}}</h2>
                 <ul>
-                    {% for droplink in navlink.value.links %}
-                    {% if droplink.value.visible %}
-                    <li class="">
-                        {{droplink.value.link}}
-                    </li>
-                    {% endif %}
-                    {% endfor %}
-                </ul>
-            
-            </li>
-            {% else %}
-            {% if navlink.value.visible %}
-            <li class="">
-                {{navlink.value.link}}
-            </li>
-            {% endif %}
-            {% endif %} <!--navlink type-->
-            {% endfor %}<!--navbar links-->
-        </ul>
-        <div class="clearfix"></div>
-    </div> <!-- /header-inner -->
-</div>
-{% endfor %}
-<!--Navbar-->
-
-<!--Sidebar-->
-<div id="content-wrapper">
-    <div id="content-inner" class="row">
-        {% for sidebar in page.sidebar.all %}
-        <h1>Sidebar {{forloop.counter}}</h1>
-        <div id="sidebar" class="col-lg-2 col-md-2 col-sm-2">
-            {% for block in sidebar.sidebar %}
-            <div class="block">
-                <h5 class="block-heading">{{block.value.title}}</h5>
-                <ul>
+                    {% if block.block_type == 'extlinks' %}<!--check for extlink or content stream-->
                     {% for link in block.value.links %}
                     {% if link.value.visible %}
-                    <li>{{link.value.link}}</li>
-                    {% endif %}
-                    {% endfor %}
+                    <li>
+                        {{link.value.link}}
+                    </li>
+                    {% endif %} <!--end link visible-->
+                    {% endfor %}<!--end block-->
+                    {% else %}
+                    {{block.value.content}}
+                    {% endif %}<!--end extlink or content stream-->
                 </ul>
             </div>
-            {% endfor %}<!-- /block -->
+            {% endfor %}<!--footer contents-->
+            <div class="clearfix"></div>
         </div>
-        {% endfor %}
-        <!--Sidebar-->
-        {% block maincontent %}
-        
-        {% endblock %}
-    </div> <!-- /content-inner -->
+    </div>
+    {% endfor %}
+    <!--Footer-->
 </div>
-
-<!--Footer-->
-{% for footer in page.footer.all %}
-<h1>{{footer.title}}</h1>
-<div id="footer-wrapper">
-    <div id="footer-inner">
-        {% for block in footer.footer %}
-        <div class="foot col-lg-4 col-md-4 col-sm-4">
-            <h2 class="foot-heading">{{block.value.title}}</h2>
-            <ul>
-                {% if block.block_type == 'extlinks' %}
-                {% for link in block.value.links %}
-                {% if link.value.visible %}
-                <li>
-                    {{link.value.link}}
-                </li>
-                {% endif %} <!--end visible-->
-                {% endfor %}<!--end block-->
-                {% else %}
-                {{block.value.content}}
-                {% endif %}
-            </ul>
-        </div>
-        {% endfor %}<!--footer-->
-    </div> <!-- /footer-inner -->
-</div>
-{% endfor %}
-<!--Footer-->
-
 {% endblock %}
 
 
