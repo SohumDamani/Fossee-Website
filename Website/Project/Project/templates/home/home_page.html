@@ -3,12 +3,15 @@
 {% block maincontent %}
 {% load wagtailcore_tags wagtailimages_tags %}
 
-    {% for block in page.content %}
+{% for block in page.content %}
+<div>
     {% if block.block_type == "text" %}
     <h3>{{block.value.title}}</h3>
     <p>{{block.value.content|richtext}}</p>
-    {% else %}
-    {% include_block block %}
+    {% elif block.block_type == 'images' %}
+    <!--looping ober the gallery-->
+    {% include_block block%}
     {% endif %}
-    {%  endfor %}
+</div>
+{%  endfor %}
 {% endblock %}
