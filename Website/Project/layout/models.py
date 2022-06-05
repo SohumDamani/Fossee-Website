@@ -45,7 +45,7 @@ class Sidebar(models.Model):
     title = models.CharField(primary_key=True,max_length=255)
     sidebar = StreamField(
         [
-            ('sidebar',blocks.TitleAndLinks())
+            ('sidebar',blocks.TitleAndLinks(lable = 'Internal Link')),
         ],null=True,blank=True,collapsed=True)
     panels = [FieldPanel('title'),
               FieldPanel('sidebar')]

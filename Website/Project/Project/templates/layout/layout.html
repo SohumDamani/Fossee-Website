@@ -28,14 +28,14 @@
                 {% for navlink in navbar.links %}<!--navbar links-->
                 {% if navlink.block_type == 'dropdown' %}<!--navlink type-->
                 <li class="dropdown open">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <a class="dropdown-toggle " data-toggle="dropdown" href="#">
                         {{navlink.value.title}} <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu pull-right">
                         {% for droplink in navlink.value.links %}
                         {% if droplink.value.visible %}
                         <li>
-                            {{droplink.value.link}}
+                            {% include_block droplink %}
                         </li>
                         {% endif %}
                         {% endfor %}
@@ -44,7 +44,7 @@
                 {% else %}
                 {% if navlink.value.visible %}
                 <li class="dropdown">
-                    {{navlink.value.link}}
+                    {% include_block navlink %}
                 </li>
                 {% endif %}
                 {% endif %} <!--navlink type-->
@@ -68,7 +68,7 @@
                     <ul>
                         {% for link in block.value.links %}
                         {% if link.value.visible %}
-                        <li>{{link.value.link}}</li>
+                        <li>{% include_block link %}</li>
                         {% endif %}
                         {% endfor %}
                     </ul>
@@ -77,7 +77,7 @@
             </div>
             {% endfor %}
             <!--Sidebar-->
-            <div id="content" class="col-lg-10 col-md-10 col-sm-10">
+            <div id="content" class="col-lg-10 col-md-10 col-sm-10" style="padding-top:10px;">
                 {% block maincontent %}
                 
                 {% endblock %}

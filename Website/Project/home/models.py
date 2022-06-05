@@ -20,9 +20,8 @@ class HomePage(Page):
     max_count = 1
 
     content = StreamField([
-        ('text',blocks.TitleAndContent()),
-        ('img',blocks.ImageBlock()),
-        ('images',blocks.Gallery(blocks.ImageBlock()))
+        ('text',blocks.TitleAndContent(label='text')),
+        ('images',blocks.ImageGalleryBlock()),
     ],null=True,collapsed=True)
 
     content_panels = Page.content_panels + [
@@ -32,16 +31,13 @@ class HomePage(Page):
 class FlexPage(Page):
     def get_context(self, request, *args, **kwargs):
         context = super(FlexPage,self).get_context(request)
-        # I'm remaning page to point to layout page
-        # Use self to access the page features
         context['layout'] = Layout.objects.get(slug='layout')
         return context
 
     content = StreamField([
         ('title',blocks.CharBlock()),
         ('text',blocks.CustomRichTextBlock(label='content')),
-        ('images', blocks.Gallery(blocks.ImageBlock()))
-
+        ('images', blocks.ImageGalleryBlock()),
     ])
 
     content_panels = Page.content_panels + [
