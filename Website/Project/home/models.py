@@ -35,8 +35,8 @@ class FlexPage(Page):
         return context
 
     content = StreamField([
-        ('title',blocks.CharBlock()),
-        ('text',blocks.CustomRichTextBlock(label='content')),
+        ('text',blocks.CustomRichTextBlock(label='text',group="TEXT")),
+        ('content',blocks.TitleAndContent(label='content',group="TEXT")),
         ('images', blocks.ImageGalleryBlock()),
     ])
 
