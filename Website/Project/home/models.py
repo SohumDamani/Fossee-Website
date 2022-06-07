@@ -35,10 +35,11 @@ class FlexPage(Page):
         return context
 
     content = StreamField([
-        ('text',blocks.CustomRichTextBlock(label='text',group="TEXT")),
+        ('title',wagtailblocks.RichTextBlock(features=['h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+                         'bold', 'italic'],group="TEXT")),
         ('content',blocks.TitleAndContent(label='content',group="TEXT")),
         ('images', blocks.ImageGalleryBlock()),
-    ])
+    ],collapsed=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('content')

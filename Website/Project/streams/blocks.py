@@ -50,43 +50,6 @@ class CustomRichTextBlock(blocks.RichTextBlock):
 class Gallery(blocks.ListBlock):
     pass
 
-
-class TitleAndContent(blocks.StructBlock):
-    choices = [('accordion', 'Accordion'),
-               ('Column', (
-                   ('2','2 Column'),
-                   ('3', "3 Column"),
-                   ('4', "4 Column"),
-               )
-                ),
-               ('normal', 'Normal'), ]
-
-    title = blocks.CharBlock(max_length=250, required=False)
-    type = blocks.ChoiceBlock(choices=choices,default=choices[2])
-    data = blocks.StreamBlock([
-        ('content',blocks.RichTextBlock())
-    ],min=1,label="Content")
-
-    class Meta:
-        template = 'streams/title_and_content.html'
-        icon = 'edit'
-
-
-class TitleAndLinks(blocks.StructBlock):
-    title = blocks.CharBlock(max_length=250, required=True)
-    links = StreamBlock(
-        [
-            ('link', LinkBlock(label='Internal Link')),
-            ('ext_link', ExternalLinkBlock(label='External Link'))
-        ], collapsed=True
-    )
-
-    class Meta:
-        template = "streams/self_block.html"
-        icon = 'edit'
-        label = 'Content'
-
-
 class ImageBlock(blocks.StructBlock):
     title = CharBlock(max_length=255,
                       help_text="Add only if you want to display it with the image",
@@ -116,3 +79,42 @@ class ImageGalleryBlock(blocks.StructBlock):
     class Meta:
         template = 'streams/img_gallery.html'
         icon = 'image'
+
+
+class TitleAndContent(blocks.StructBlock):
+    choices = [('accordion', 'Accordion'),
+               ('Column', (
+                   ('2','2 Column'),
+                   ('3', "3 Column"),
+                   ('4', "4 Column"),
+               )
+                ),
+               ('normal', 'Normal'), ]
+
+    title = blocks.CharBlock(max_length=250, required=False)
+    type = blocks.ChoiceBlock(choices=choices,default=choices[2])
+    data = blocks.StreamBlock([
+        ('content',blocks.RichTextBlock()),
+        ('image',ImageBlock())
+    ],min=1,label="Content")
+
+    class Meta:
+        template = 'streams/title_and_content.html'
+        icon = 'edit'
+
+
+class TitleAndLinks(blocks.StructBlock):
+    title = blocks.CharBlock(max_length=250, required=True)
+    links = StreamBlock(
+        [
+            ('link', LinkBlock(label='Internal Link')),
+            ('ext_link', ExternalLinkBlock(label='External Link'))
+        ], collapsed=True
+    )
+
+    class Meta:
+        template = "streams/self_block.html"
+        icon = 'edit'
+        label = 'Content'
+
+
